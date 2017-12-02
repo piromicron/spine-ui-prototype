@@ -1,7 +1,7 @@
 .vertebra-point {
 	fill: none; 
 	stroke-width: 1px;
-	opacity: .7
+	opacity: .7;
 	width: 90px; 
 	height: 90px;
 	font-size: 24px;
@@ -47,6 +47,15 @@
 	stroke:none;
 }
 
+.other {
+	stroke: white;
+}
+
+.svg-label-other {
+	fill: white;
+	stroke:none;
+}
+
 
 .toolbox {
 	opacity: 1;
@@ -56,3 +65,9 @@
 	font-size: 6px;
 	color: white;
 }
+
+.marker {
+	position: absolute; /* Must be absolute or relative */
+	left: 0px;
+	top: 0px;
+
