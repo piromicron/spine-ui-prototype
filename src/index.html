@@ -1,0 +1,217 @@
+<html>
+<head>
+	<title>spine - UI mockup</title>
+	<link rel="icon" type="image/png" href="favicon-96x96.png" />
+	<style>
+		.vertebra-point {
+			fill: none; 
+			stroke-width: 1px;
+			opacity: .7
+			width: 90px; 
+			height: 90px;
+			font-size: 24px;
+		}
+
+		.set {
+		}
+
+		.vertebra-label {
+			font-size: 8;
+			fill: rgba(255, 255, 230, 1);
+		}
+
+
+		.template {
+			stroke: black;
+		}
+
+		.center {
+			stroke: red;
+		}
+	
+		.svg-label-center {
+			fill: red;
+			stroke:none;
+		}
+		
+		.left {
+			stroke: yellow;
+		}
+	
+		.svg-label-left {
+			fill: yellow;
+			stroke:none;
+		}
+
+		.right {
+			stroke: blue;
+		}
+	
+		.svg-label-right {
+			fill: blue;
+			stroke:none;
+		}
+
+
+		.toolbox {
+			opacity: 1;
+		}
+
+		.label-micro {
+			font-size: 6px;
+			color: white;
+		}
+
+	</style> 
+	<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>-->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<!-- for draggable , etc. -->
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<script src="jquery.ui.touch-punch.js"></script>
+</head>
+<body style="background-color: #AABBAA;">
+<div id="image" style="width: 100%; position: absolute; left: 0; top: 0;">
+<!-- 2130x5142 -->
+	<img id="theimage" width="2130; style="position: absolute; left: 0; top: 0;">
+</div>
+<div id="templates" hidden="true">
+	<svg id="q-vertebra-point-template" viewBox="-21 -21 43 43" xmlns="http://www.w3.org/2000/svg">
+		<g transform="translate(1,1)">
+			<line x1="-16" y1="0" x2="16" y2="0"></line>
+			<line x1="0" y1="-16" x2="0" y2="16"></line>
+			<ellipse cx="0" cy="0" rx="20" ry="20"></ellipse>
+		</g>    
+	</svg>
+	<svg id="test0-vertebra-point-template" viewBox="-21 -21 43 43" xmlns="http://www.w3.org/2000/svg">
+		<g transform="translate(1,1)">
+			<line x1="-20" y1="0" x2="20" y2="0"></line>
+			<line x1="0" y1="-20" x2="0" y2="20"></line>
+			<ellipse cx="0" cy="0" rx="20" ry="20"></ellipse>
+			<line x1="20" y1="20" x2="-20" y2="-20"></line>
+			<line x1="20" y1="20" x2="20" y2="-20"></line>
+			<line x1="-20" y1="-20" x2="20" y2="-20"></line>
+			<line x1="-20" y1="20" x2="20" y2="20"></line>
+			<line x1="-20" y1="20" x2="-20" y2="-20"></line>
+			<line x1="20" y1="-20" x2="-20" y2="20"></line>
+		</g>    
+	</svg>
+	<svg id="test-vertebra-point-template" viewBox="0 0 43 43" xmlns="http://www.w3.org/2000/svg">
+		<g transform="translate(1,1)">
+			<line x1="2" y1="21" x2="40" y2="21"></line>
+			<line x1="21" y1="2" x2="21" y2="40"></line>
+			<ellipse cx="21" cy="21" rx="21" ry="21"></ellipse>-->
+			<line x1="0" y1="42" x2="42" y2="42"></line>
+			<line x1="0" y1="0" x2="42" y2="0"></line>
+			<line x1="0" y1="0" x2="0" y2="42"></line>
+			<line x1="42" y1="0" x2="42" y2="42"></line>
+		</g>    
+	</svg>
+	<svg id="vertebra-point-template" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+		<g>
+			<line x1="3" y1="40" x2="77" y2="40"></line>
+			<line x1="40" y1="3" x2="40" y2="77"></line>
+			<ellipse cx="40" cy="40" rx="40" ry="40"></ellipse>
+			<line x1="68" y1="68" x2="108" y2="108"></line>
+			<text x="100" y="130">XXXX</text>
+		</g>    
+	</svg>
+			
+		</div>
+
+
+<script>
+	function doit() {
+		//$("div#image").scrollLeft(700);
+		//$("div#image").scrollTop(300);
+		imageWidth = $("img#theimage").width();
+		imageHeight = $("img#theimage").height();
+		if( $(window).width() < imageWidth ) {
+			$("div#image").scrollLeft((imageWidth-$(window).width())/2);
+		}
+		if( $(window).height() < imageHeight ) {
+			$("div#image").scrollTop(0.06*$(window).height());
+		}
+
+		var points = {
+	
+			"test": {
+				x: 0,
+				y: 0,
+				place: "center"
+			},
+	/*
+			"c5c" : {
+				x: 1071, 
+				y: 422,
+				place : "center"
+			},
+			"c5r" : {
+				x: 962, 
+				y: 356,
+				place: "right" 
+			}
+	*/
+		};
+
+		var vertebraLabels = ["C5","C6","C7","Th1","Th2","Th3","Th4","Th5","Th6","Th7"];
+
+		const minY=400;
+		const maxY=1700;
+		const cX=1060;
+		const dX=110;
+		const dY = (maxY-minY)/vertebraLabels.length;
+		//right is on the left on image
+		for( let i=0; i < vertebraLabels.length; i++ ) {
+			points[vertebraLabels[i]+"c"] = { "y": minY+dY*i, "x": cX, place: "center" };
+			points[vertebraLabels[i]+"r"] = { "y": minY+dY*i, "x": cX-dX, place: "right" };
+			points[vertebraLabels[i]+"l"] = { "y": minY+dY*i, "x": cX+dX, place: "left" };
+		}
+
+
+
+		const centerOfPointImage = (40*90/150);//+1; //TODO: why?!        
+		
+		for(var pointid in points) {
+			let point = points[pointid];
+			console.log("Point #" + pointid + ": { x: "+ point.x+", y: "+ point.y + ", place: "+ point.place );
+				
+			function set( pointid, point ) {
+				let left = point.x-centerOfPointImage;
+				let top = point.y-centerOfPointImage;
+				let style = "left: "+left+"; top: "+top+"; position: absolute;";
+				console.log("Point #" + pointid );
+				let svg = $("svg#vertebra-point-template").clone()
+					.attr( "id", pointid)
+					.addClass("vertebra-point set " + point.place)
+					//.attr("style", style)
+					;
+				//svg.draggable();
+				let div = $(svg).wrap("<div id=\"div_"+pointid+"\" style=\""+style+"\"></div>").parent(); //width=\"120\" height=\"120\"
+				//$("div#image").append(svg);
+				//$(svg).find("g").append("<text x=\"50\" y=\"99\">"+pointid+"</text>"); //TODO: is in dom but not shown!?
+				
+				let labelElemeent = $(svg).find("text").get(0);
+				//labelElemeent.innerHTML = pointid;
+				let labelClass = "svg-label-"+ point.place;
+				$(svg).find("text").each(function () { $(this).html(pointid); $(this).addClass(labelClass); });                     
+				//!#not in ie# labelElemeent.classList.add(labelClass);
+				$("div#image").append(div);
+				div.draggable();    
+				//div.append("<span class=\"label-micro\">"+pointid+"</span>");
+				};
+				
+			set(pointid,point);
+		}
+	}
+	$("img#theimage").load( function() {
+		console.log("Image loaded.");
+		doit();
+	});
+</script>
+<script>
+	$("img#theimage").attr("src", "IMG-0001-00001.jpg" );
+	//$("img#theimage").attr("src", "data:image/jpeg;base64,"
+</script>
+</body>
+</html>
