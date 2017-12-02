@@ -1,157 +1,28 @@
 <html>
 <head>
 	<title>spine - UI mockup</title>
-	<link rel="icon" type="image/png" href="favicon-96x96.png" />
-	<style>
-		.vertebra-point {
-			fill: none; 
-			stroke-width: 1px;
-			opacity: .7
-			width: 90px; 
-			height: 90px;
-			font-size: 24px;
-		}
-
-		.set {
-		}
-
-		.vertebra-label {
-			font-size: 8;
-			fill: rgba(255, 255, 230, 1);
-		}
-
-
-		.template {
-			stroke: black;
-		}
-
-		.center {
-			stroke: red;
-		}
-	
-		.svg-label-center {
-			fill: red;
-			stroke:none;
-		}
-		
-		.left {
-			stroke: yellow;
-		}
-	
-		.svg-label-left {
-			fill: yellow;
-			stroke:none;
-		}
-
-		.right {
-			stroke: blue;
-		}
-	
-		.svg-label-right {
-			fill: blue;
-			stroke:none;
-		}
-
-
-		.toolbox {
-			opacity: 1;
-		}
-
-		.label-micro {
-			font-size: 6px;
-			color: white;
-		}
-
-	</style> 
+	<link rel="icon" type="image/png" href="favicon-96x96.png"/>
+	<link rel="stylesheet" href="spine.css" type="text/css"/>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script src="jquery.ui.touch-punch.js"></script>
 </head>
 <body style="background-color: #AABBAA;">
-<div id="image" style="width: 100%; position: absolute; left: 0; top: 0;">
-<!-- 2130x5142 -->
-	<img id="theimage" width="2130; style="position: absolute; left: 0; top: 0;">
-</div>
-<div id="templates" hidden="true">
-	<svg id="vertebra-point-template" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
-		<g>
-			<line x1="3" y1="40" x2="77" y2="40"></line>
-			<line x1="40" y1="3" x2="40" y2="77"></line>
-			<ellipse cx="40" cy="40" rx="40" ry="40"></ellipse>
-			<line x1="68" y1="68" x2="108" y2="108"></line>
-			<text x="100" y="130">XXXX</text>
-		</g>    
-	</svg>
-</div>
-<script>
-	function doit() {
-		imageWidth = $("img#theimage").width();
-		imageHeight = $("img#theimage").height();
-		if( $(window).width() < imageWidth ) {
-			$("div#image").scrollLeft((imageWidth-$(window).width())/2);
-		}
-		if( $(window).height() < imageHeight ) {
-			$("div#image").scrollTop(0.06*$(window).height());
-		}
-
-		var points = {
-	
-			"test": {
-				x: 0,
-				y: 0,
-				place: "center"
-			},
-		};
-
-		var vertebraLabels = ["C5","C6","C7","Th1","Th2","Th3","Th4","Th5","Th6","Th7"];
-
-		const minY=400;
-		const maxY=1700;
-		const cX=1060;
-		const dX=110;
-		const dY = (maxY-minY)/vertebraLabels.length;
-
-		//right is on the left on image
-		for( let i=0; i < vertebraLabels.length; i++ ) {
-			points[vertebraLabels[i]+"c"] = { "y": minY+dY*i, "x": cX, place: "center" };
-			points[vertebraLabels[i]+"r"] = { "y": minY+dY*i, "x": cX-dX, place: "right" };
-			points[vertebraLabels[i]+"l"] = { "y": minY+dY*i, "x": cX+dX, place: "left" };
-		}
-
-		const centerOfPointImage = (40*90/150);//+1; //TODO: why?!        
-		
-		for(var pointid in points) {
-			let point = points[pointid];
-			console.log("Point #" + pointid + ": { x: "+ point.x+", y: "+ point.y + ", place: "+ point.place );
-				
-			function set( pointid, point ) {
-				let left = point.x-centerOfPointImage;
-				let top = point.y-centerOfPointImage;
-				let style = "left: "+left+"; top: "+top+"; position: absolute;";
-				console.log("Point #" + pointid );
-				let svg = $("svg#vertebra-point-template").clone()
-					.attr( "id", pointid)
-					.addClass("vertebra-point set " + point.place)
-					;
-				let div = $(svg).wrap("<div id=\"div_"+pointid+"\" style=\""+style+"\"></div>").parent(); 
-
-				let labelElemeent = $(svg).find("text").get(0);
-				let labelClass = "svg-label-"+ point.place;
-				$(svg).find("text").each(function () { $(this).html(pointid); $(this).addClass(labelClass); });                     
-				$("div#image").append(div);
-				div.draggable();    
-				};
-				
-			set(pointid,point);
-		}
-	}
-	$("img#theimage").load( function() {
-		console.log("Image loaded.");
-		doit();
-	});
-</script>
-<script>
-	$("img#theimage").attr("src", "IMG-0001-00001.jpg" );
-</script>
+	<div id="image" style="width: 100%; position: absolute; left: 0; top: 0;">
+	<!-- 2130x5142 -->
+		<img id="theimage" width="2130; style="position: absolute; left: 0; top: 0;">
+	</div>
+	<div id="templates" hidden="true">
+		<svg id="vertebra-point-template" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+			<g>
+				<line x1="3" y1="40" x2="77" y2="40"></line>
+				<line x1="40" y1="3" x2="40" y2="77"></line>
+				<ellipse cx="40" cy="40" rx="40" ry="40"></ellipse>
+				<line x1="68" y1="68" x2="108" y2="108"></line>
+				<text x="100" y="130">XXXX</text>
+			</g>    
+		</svg>
+	</div>
+	<script src="spine.js"/></script>
 </body>
 </html>

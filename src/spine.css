@@ -1,0 +1,58 @@
+.vertebra-point {
+	fill: none; 
+	stroke-width: 1px;
+	opacity: .7
+	width: 90px; 
+	height: 90px;
+	font-size: 24px;
+}
+
+.set {
+}
+
+.vertebra-label {
+	font-size: 8;
+	fill: rgba(255, 255, 230, 1);
+}
+
+
+.template {
+	stroke: black;
+}
+
+.center {
+	stroke: red;
+}
+
+.svg-label-center {
+	fill: red;
+	stroke:none;
+}
+
+.left {
+	stroke: yellow;
+}
+
+.svg-label-left {
+	fill: yellow;
+	stroke:none;
+}
+
+.right {
+	stroke: blue;
+}
+
+.svg-label-right {
+	fill: blue;
+	stroke:none;
+}
+
+
+.toolbox {
+	opacity: 1;
+}
+
+.label-micro {
+	font-size: 6px;
+	color: white;
+}
