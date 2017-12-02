@@ -1,4 +1,4 @@
-function doit() {
+function scrollToStart() {
 	imageWidth = $("img#theimage").width();
 	imageHeight = $("img#theimage").height();
 	if( $(window).width() < imageWidth ) {
@@ -7,15 +7,18 @@ function doit() {
 	if( $(window).height() < imageHeight ) {
 		$("div#image").scrollTop(0.06*$(window).height());
 	}
+}
 
-	var points = {
+var points = {
 
-		"test": {
-			x: 0,
-			y: 0,
-			place: "center"
-		},
-	};
+	"test": {
+		x: 0,
+		y: 0,
+		place: "center"
+	},
+};
+
+function loadPoints() {
 
 	var vertebraLabels = ["C5","C6","C7","Th1","Th2","Th3","Th4","Th5","Th6","Th7"];
 
@@ -31,7 +34,9 @@ function doit() {
 		points[vertebraLabels[i]+"r"] = { "y": minY+dY*i, "x": cX-dX, place: "right" };
 		points[vertebraLabels[i]+"l"] = { "y": minY+dY*i, "x": cX+dX, place: "left" };
 	}
+}
 
+function markPoints() {
 	const centerOfPointImage = (40*90/150);//+1; //TODO: why?!        
 	
 	for(var pointid in points) {
@@ -60,10 +65,18 @@ function doit() {
 	}
 }
 
-$("img#theimage").load( function() {
-	console.log("Image loaded.");
-	doit();
-});
+function doit() {
+	scrollToStart();
+	loadPoints();
+	markPoints();
+}
 
-$("img#theimage").attr("src", "IMG-0001-00001.jpg" );
+function loadImage() {
+	$("img#theimage").load( function() {
+		console.log("Image loaded.");
+		doit();
+	});
+	$("img#theimage").attr("src", "IMG-0001-00001.jpg" );
+}
+loadImage();
 
