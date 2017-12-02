@@ -40,37 +40,72 @@ function makePointsFromTemplate(width, height) {
 	return scalePointMap(pointTemplate_Front_LR()).points;
 }
 
+/*
+* Mark
+*/
+class Mark extends AbsoluteMark { 
+	makeElement() {
+		let svg = $("svg#vertebra-point-template").get(0).cloneNode(true)//.clone()
+			//.attr( "id", pointid)
+			//.addClass("vertebra-point set " + point.place)
+			;
+		//let div = $(svg).wrap("<div id=\"div_"+pointid+"\" style=\""+style+"\"></div>").parent(); 
+		let div = super.makeElement();
+
+		//TODO: fix absolute mark then put it back from .mark
+		//div.style["width"] = 90;
+		//div.style["height"] = 90;
+
+
+		div.appendChild(svg)
+		//let labelElemeent = $(svg).find("text").get(0);
+		//let labelClass = "svg-label-"+ point.place;
+		//$(svg).find("text").each(function () { $(this).html(pointid); $(this).addClass(labelClass); });                     
+		//return div;
+		return div;	
+	}
+	pin() {
+		const centerOfPointImage = (40*90/150);//+1; //TODO: why?!        
+		return {x: centerOfPointImage, y: centerOfPointImage}; 
+	}
+	mark(x, y, pointId, pointClass) {
+		super.mark(x,y);
+		this.element.setAttribute("id", pointId);
+		//TODO: fix absolute mark then move it to createElemeent
+		this.element.style["width"] = 90;
+		this.element.style["height"] = 90;
+		let svg = $(this.element).find("svg").get(0);
+		let labelElemeent = $(svg).find("text").get(0);
+		let labelClass = "svg-label-"+ pointClass;
+		$(svg).find("text").each(function () { $(this).html(pointId); $(this).addClass(labelClass); });                     
+		// pointClass is not a part of mark value
+		this.element.className += " vertebra-point set " + pointClass;
+	}
+	value() { 
+		let value = super.value();
+		value["id"] = this.element.id;
+		return value; 
+	}
+}
 
 /**
 * Marker
 */
 
+
+
 class Marker {
 	createMark(pointid, point) {
-		const centerOfPointImage = (40*90/150);//+1; //TODO: why?!        
-
-		let left = point.x-centerOfPointImage;
-		let top = point.y-centerOfPointImage;
-		let style = "left: "+left+"; top: "+top+"; position: absolute;";
-		console.log("Point #" + pointid );
-		let svg = $("svg#vertebra-point-template").clone()
-			.attr( "id", pointid)
-			.addClass("vertebra-point set " + point.place)
-			;
-		let div = $(svg).wrap("<div id=\"div_"+pointid+"\" style=\""+style+"\"></div>").parent(); 
-
-		let labelElemeent = $(svg).find("text").get(0);
-		let labelClass = "svg-label-"+ point.place;
-		$(svg).find("text").each(function () { $(this).html(pointid); $(this).addClass(labelClass); });                     
-		return div;	
+		let mark = new Mark();
+		mark.mark(point.x,point.y, pointid, point.place);
+		return mark.element;
 	}
 
 	set(pointid, point) {
 		let element = this.createMark(pointid, point);
 		$("div#image").append(element);
-		element.draggable();    
+		$(element).draggable();    
 	}
-
 
 	markPoints(points) {
 		for(var pointid in points) {
@@ -93,11 +128,11 @@ class Editor {
 	loadImage(url) {
 		this.$image().load( function() {
 			console.log("Image loaded.");
-			Editor.imageLoaded();
+			Editor.getEditor().imageLoaded();
 		});
 		this.$image().attr("src", url );
 	}
-	static imageLoaded() {
+	imageLoaded() {
 		let points = makePointsFromTemplate();
 		new Marker().markPoints(points);
 		this.scrollToStart();
@@ -114,6 +149,10 @@ class Editor {
 	}
 	$image() {
 		return $("img#theimage");
+	}
+
+	static getEditor() {
+		return Editor_theEditor; 
 	}
 }
 
