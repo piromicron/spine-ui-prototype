@@ -45,23 +45,11 @@ function makePointsFromTemplate(width, height) {
 */
 class Mark extends AbsoluteMark { 
 	makeElement() {
-		let svg = $("svg#vertebra-point-template").get(0).cloneNode(true)//.clone()
-			//.attr( "id", pointid)
-			//.addClass("vertebra-point set " + point.place)
-			;
-		//let div = $(svg).wrap("<div id=\"div_"+pointid+"\" style=\""+style+"\"></div>").parent(); 
+		let svg = $("svg#vertebra-point-template").get(0).cloneNode(true);
 		let div = super.makeElement();
-
-		//TODO: fix absolute mark then put it back from .mark
-		//div.style["width"] = 90;
-		//div.style["height"] = 90;
-
-
+		div.style["width"] = 90;
+		div.style["height"] = 90;
 		div.appendChild(svg)
-		//let labelElemeent = $(svg).find("text").get(0);
-		//let labelClass = "svg-label-"+ point.place;
-		//$(svg).find("text").each(function () { $(this).html(pointid); $(this).addClass(labelClass); });                     
-		//return div;
 		return div;	
 	}
 	pin() {
@@ -71,9 +59,6 @@ class Mark extends AbsoluteMark {
 	mark(x, y, pointId, pointClass) {
 		super.mark(x,y);
 		this.element.setAttribute("id", pointId);
-		//TODO: fix absolute mark then move it to createElemeent
-		this.element.style["width"] = 90;
-		this.element.style["height"] = 90;
 		let svg = $(this.element).find("svg").get(0);
 		let labelElemeent = $(svg).find("text").get(0);
 		let labelClass = "svg-label-"+ pointClass;
