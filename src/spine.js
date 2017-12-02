@@ -85,40 +85,40 @@ function markPoints(points) {
 * Editor
 */
 
-function $image() {
-	return $("img#theimage");
-}
 
-function startEditor() {
-	loadImage();
-}
-
-
-function loadImage() {
-	$image().load( function() {
-		console.log("Image loaded.");
-		editorImageLoaded();
-	});
-	$image().attr("src", "IMG-0001-00001.jpg" );
-}
-
-
-function editorImageLoaded() {
-	let points = makePointsFromTemplate();
-	markPoints(points);
-	//scrollToStart();
-}
-
-function scrollToStart() {
-	let imageWidth = $image().width();
-	let imageHeight = $image().height();
-	if( $(window).width() < imageWidth ) {
-		$image().scrollLeft((imageWidth-$(window).width())/2);
+class Editor {
+	open(url) {
+		this.loadImage(url);
 	}
-	if( $(window).height() < imageHeight ) {
-		$image().scrollTop(0.06*$(window).height());
+	loadImage(url) {
+		this.$image().load( function() {
+			console.log("Image loaded.");
+			Editor.imageLoaded();
+		});
+		this.$image().attr("src", url );
+	}
+	static imageLoaded() {
+		let points = makePointsFromTemplate();
+		markPoints(points);
+		this.scrollToStart();
+	}
+	scrollToStart() {
+		let imageWidth = this.$image().width();
+		let imageHeight = this.$image().height();
+		if( $(window).width() < imageWidth ) {
+			this.$image().scrollLeft((imageWidth-$(window).width())/2);
+		}
+		if( $(window).height() < imageHeight ) {
+			this.$image().scrollTop(0.06*$(window).height());
+		}
+	}
+	$image() {
+		return $("img#theimage");
 	}
 }
 
+var Editor_theEditor = new Editor();
 
-startEditor();
+
+const imageURL = "IMG-0001-00001.jpg";
+Editor_theEditor.open(imageURL);
