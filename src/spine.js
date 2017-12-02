@@ -45,39 +45,39 @@ function makePointsFromTemplate(width, height) {
 * Marker
 */
 
+class Marker {
+	createMark(pointid, point) {
+		const centerOfPointImage = (40*90/150);//+1; //TODO: why?!        
 
-function createMark(pointid, point) {
-	const centerOfPointImage = (40*90/150);//+1; //TODO: why?!        
+		let left = point.x-centerOfPointImage;
+		let top = point.y-centerOfPointImage;
+		let style = "left: "+left+"; top: "+top+"; position: absolute;";
+		console.log("Point #" + pointid );
+		let svg = $("svg#vertebra-point-template").clone()
+			.attr( "id", pointid)
+			.addClass("vertebra-point set " + point.place)
+			;
+		let div = $(svg).wrap("<div id=\"div_"+pointid+"\" style=\""+style+"\"></div>").parent(); 
 
-	let left = point.x-centerOfPointImage;
-	let top = point.y-centerOfPointImage;
-	let style = "left: "+left+"; top: "+top+"; position: absolute;";
-	console.log("Point #" + pointid );
-	let svg = $("svg#vertebra-point-template").clone()
-		.attr( "id", pointid)
-		.addClass("vertebra-point set " + point.place)
-		;
-	let div = $(svg).wrap("<div id=\"div_"+pointid+"\" style=\""+style+"\"></div>").parent(); 
+		let labelElemeent = $(svg).find("text").get(0);
+		let labelClass = "svg-label-"+ point.place;
+		$(svg).find("text").each(function () { $(this).html(pointid); $(this).addClass(labelClass); });                     
+		return div;	
+	}
 
-	let labelElemeent = $(svg).find("text").get(0);
-	let labelClass = "svg-label-"+ point.place;
-	$(svg).find("text").each(function () { $(this).html(pointid); $(this).addClass(labelClass); });                     
-	return div;	
-}
-
-function set(pointid, point) {
-	let element = createMark(pointid, point);
-	$("div#image").append(element);
-	element.draggable();    
-}
+	set(pointid, point) {
+		let element = this.createMark(pointid, point);
+		$("div#image").append(element);
+		element.draggable();    
+	}
 
 
-function markPoints(points) {
-	
-	for(var pointid in points) {
-		let point = points[pointid];
-		console.log("Point #" + pointid + ": { x: "+ point.x+", y: "+ point.y + ", place: "+ point.place );
-		set(pointid,point);
+	markPoints(points) {
+		for(var pointid in points) {
+			let point = points[pointid];
+			console.log("Point #" + pointid + ": { x: "+ point.x+", y: "+ point.y + ", place: "+ point.place );
+			this.set(pointid,point);
+		}
 	}
 }
 
@@ -99,7 +99,7 @@ class Editor {
 	}
 	static imageLoaded() {
 		let points = makePointsFromTemplate();
-		markPoints(points);
+		new Marker().markPoints(points);
 		this.scrollToStart();
 	}
 	scrollToStart() {
