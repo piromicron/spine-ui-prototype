@@ -1,17 +1,10 @@
-function scrollToStart() {
-	imageWidth = $("img#theimage").width();
-	imageHeight = $("img#theimage").height();
-	if( $(window).width() < imageWidth ) {
-		$("div#image").scrollLeft((imageWidth-$(window).width())/2);
-	}
-	if( $(window).height() < imageHeight ) {
-		$("div#image").scrollTop(0.06*$(window).height());
-	}
-}
 
 
+/**
+* Templates
+*/
 
-function loadPoints() {
+function pointTemplate_Front_LR() {
 	let vertebraLabels = ["C5","C6","C7","Th1","Th2","Th3","Th4","Th5","Th6","Th7"];
 
 	let points = {
@@ -35,8 +28,23 @@ function loadPoints() {
 		points[vertebraLabels[i]+"r"] = { "y": minY+dY*i, "x": cX-dX, place: "right" };
 		points[vertebraLabels[i]+"l"] = { "y": minY+dY*i, "x": cX+dX, place: "left" };
 	}
-	return points;
+
+	return { "width": 2130, "height": 1542, "points": points  }
+} 
+
+function scalePointMap(pmap, width, height) {
+	return pmap;
 }
+
+function makePointsFromTemplate(width, height) {
+	return scalePointMap(pointTemplate_Front_LR()).points;
+}
+
+
+/**
+* Marker
+*/
+
 
 function createMark(pointid, point) {
 	const centerOfPointImage = (40*90/150);//+1; //TODO: why?!        
@@ -73,18 +81,44 @@ function markPoints(points) {
 	}
 }
 
-function doit() {
-	scrollToStart();
-	let points = loadPoints();
-	markPoints(points);
+/**
+* Editor
+*/
+
+function $image() {
+	return $("img#theimage");
 }
+
+function startEditor() {
+	loadImage();
+}
+
 
 function loadImage() {
-	$("img#theimage").load( function() {
+	$image().load( function() {
 		console.log("Image loaded.");
-		doit();
+		editorImageLoaded();
 	});
-	$("img#theimage").attr("src", "IMG-0001-00001.jpg" );
+	$image().attr("src", "IMG-0001-00001.jpg" );
 }
-loadImage();
 
+
+function editorImageLoaded() {
+	let points = makePointsFromTemplate();
+	markPoints(points);
+	//scrollToStart();
+}
+
+function scrollToStart() {
+	let imageWidth = $image().width();
+	let imageHeight = $image().height();
+	if( $(window).width() < imageWidth ) {
+		$image().scrollLeft((imageWidth-$(window).width())/2);
+	}
+	if( $(window).height() < imageHeight ) {
+		$image().scrollTop(0.06*$(window).height());
+	}
+}
+
+
+startEditor();
