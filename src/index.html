@@ -9,9 +9,16 @@
 	<script src="jquery.ui.touch-punch.js"></script>
 </head>
 <body style="background-color: #AABBAA;">
-	<!-- 2130x5142 -->
-	<img id="theimage" width="2130" height="5142" style="position: absolute; left: 0px; top: 0px;">
+	<!-- 2130x5142 width="2130" height="5142" -->
+	<img id="theimage" style="position: absolute; left: 0px; top: 0px;">
 	<!--TODO: width, height from loaded image -->
+
+	<input type="file" id="fileElem" accept="image/*" style="display:none" onchange="Editor.handleFiles(this.files)">
+	<a href="#" id="fileSelect">select image to load</a> 
+	<div id="fileList">
+  		<p>No files selected!</p>
+	</div>
+
 	<div id="templates" hidden="true">
 		<svg id="vertebra-point-template" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
 			<g>
