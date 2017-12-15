@@ -80,4 +80,4 @@ class Editor {
 }
 
 var Editor_theEditor = new Editor();
-//Editor.installLoadFileHandler();
+
