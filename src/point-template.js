@@ -4,7 +4,7 @@
 * Templates
 */
 
-var poinsTemplateJson_front_lr = '{\
+var poinsTemplateJson_front_rl = '{\
 "width": 2130, "height": 1542, "points": [\
   {\
     "x": 1072,\
@@ -165,9 +165,9 @@ function pointId2place(id) {
 	return place ? place : "other"; 
 }
 
-function pointTemplate_Front_LR() {
+function pointTemplate_Front_RL() {
 	if(1) {
-		let pmap = JSON.parse(poinsTemplateJson_front_lr);
+		let pmap = JSON.parse(poinsTemplateJson_front_rl);
 		pmap.points.forEach( function(element, index) {
 			element.place = pointId2place(element.id);
 		});
@@ -207,7 +207,7 @@ function scalePointMap(pmap, width, height) {
 }
 
 function makePointsFromTemplate(width, height) {
-	let scaled = scalePointMap(pointTemplate_Front_LR());
+	let scaled = scalePointMap(pointTemplate_Front_RL());
 	scaled["points"].push({"id": "test", x: 0, y: 0, place: "other"});
 	return scaled["points"];
 }
